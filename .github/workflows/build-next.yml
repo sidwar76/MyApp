@@ -1,0 +1,24 @@
+name: Build and Push Next.js Docker Image
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'inc42-website next.js/**'
+
+jobs:
+  build-nextjs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the Next.js Docker image
+        run: docker build ./inc42-website next.js -t sidwar/nextjs:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push the Next.js Docker image
+        run: docker push sidwar/nextjs:latest

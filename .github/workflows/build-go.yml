@@ -1,0 +1,24 @@
+name: Build and Push Go Docker Image
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'go-backend/**'
+
+jobs:
+  build-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the Go Docker image
+        run: docker build ./go-backend -t sidwar/go-backend:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push the Go Docker image
+        run: docker push sidwar/go-backend:latest
