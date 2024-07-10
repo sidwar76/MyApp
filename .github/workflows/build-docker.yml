@@ -1,0 +1,56 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-go:
+    if: contains(github.event.commits.*.modified, 'go-backend') || contains(github.event.head_commit.message, 'go-backend')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the Go Docker image
+        run: docker build ./go-backend -t sidwar/go-backend:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push the Go Docker image
+        run: docker push sidwar/go-backend:latest
+
+  build-wordpress:
+    if: contains(github.event.commits.*.modified, 'wordpress') || contains(github.event.head_commit.message, 'wordpress')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the WordPress Docker image
+        run: docker build ./wordpress -t sidwar/wordpress:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push the WordPress Docker image
+        run: docker push sidwar/wordpress:latest
+
+  build-nextjs:
+    if: contains(github.event.commits.*.modified, 'inc42-website next.js') || contains(github.event.head_commit.message, 'inc42-website next.js')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the Next.js Docker image
+        run: docker build ./inc42-website next.js -t sidwar/nextjs:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push the Next.js Docker image
+        run: docker push sidwar/nextjs:latest
+
