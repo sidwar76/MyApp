@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'inc42-website next.js/**'
+      - 'inc42-website-nextjs/**'
 
 jobs:
   build-nextjs:
