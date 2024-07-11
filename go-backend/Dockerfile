@@ -22,5 +22,5 @@ COPY --from=builder /app/my-go-app .
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
-# Command to run the executable
+# Command to run the executable.
 CMD ["./my-go-app"]
