@@ -14,6 +14,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'  # Adjust based on your PHP version
+
+      - name: Install Composer
+        run: sudo apt-get install -y composer
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --standard=phpcs.xml
+
       - name: Build the WordPress Docker image
         run: docker build ./wordpress -t sidwar/wordpress:latest
 
